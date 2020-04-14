@@ -38,6 +38,10 @@ app.get('/users', async (req, res) => {
 
 })
 
+// Read One User By Id
+
+// {error : "User dengan id 989999 tidak ditemukan"}
+
 // Create New User
 app.post('/users', async (req, res) => {
    // req.body = {username : 'rochafi', name: 'Rochafi', age: 28}
@@ -53,6 +57,8 @@ app.post('/users', async (req, res) => {
    }
       
 })
+
+
 
 
 app.listen(port, () => { console.log('Success Running') })
