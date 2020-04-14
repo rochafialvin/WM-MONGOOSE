@@ -8,7 +8,8 @@ app.use(express.json())
 const mongoose = require('mongoose')
 mongoose.connect('mongodb://127.0.0.1:27017/mongoose-test', {
    useNewUrlParser: true,
-   useUnifiedTopology: true
+   useUnifiedTopology: true,
+   useCreateIndex :  true
 })
 
 // IMPORT MODELS
@@ -21,21 +22,36 @@ app.get('/', (req, res) => {
    )
 })
 
+// Async Await
+
 // Read All User
-app.get('/users', (req, res) => {
-   User.find({})
-      .then(resp => res.send(resp)).catch(err => res.send(err))
+app.get('/users', async (req, res) => {
+
+   try {
+      let users = await User.find({})
+      res.send(users)
+   
+   } catch (err) {
+      res.send(err)
+
+   }
+
 })
 
 // Create New User
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
    // req.body = {username : 'rochafi', name: 'Rochafi', age: 28}
 
    // Create new user
    const user = new User(req.body)
    // Save ke database
-   user.save()
-      .then(resp => res.send(resp)).catch(err => res.send(err))
+   try {
+      let result = await user.save()
+      res.send(result)
+   } catch (err) {
+      res.send(err)
+   }
+      
 })
 
 
