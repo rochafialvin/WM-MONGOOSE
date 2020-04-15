@@ -13,10 +13,18 @@
 // }
 
 
-const validator = require('validator')
+// const validator = require('validator')
 
-let email = "alvin@gmailcom"
+// let email = "alvin@gmailcom"
 
-console.log(
-   validator.isEmail(email)
-)
+// console.log(
+//    validator.isEmail(email)
+// )
+
+const bcrypt = require('bcryptjs')
+
+let password = 'satuduaempat'
+
+bcrypt.hash(password, 8)
+   .then(res => console.log({ newPassword : res }))
+   .catch(err => console.log(err))

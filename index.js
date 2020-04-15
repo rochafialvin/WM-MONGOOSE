@@ -87,6 +87,7 @@ app.get('/user/:id', async (req, res) => {
    }
 })
 
+
 // Update User By Id
 app.patch('/user/:id', async (req, res) => {
    let _id = req.params.id
@@ -120,6 +121,7 @@ app.patch('/user/:id', async (req, res) => {
       res.send(err)
       
    }
+
 })
 
 // Delete User By Id
