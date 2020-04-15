@@ -9,7 +9,8 @@ const mongoose = require('mongoose')
 mongoose.connect('mongodb://127.0.0.1:27017/mongoose-test', {
    useNewUrlParser: true,
    useUnifiedTopology: true,
-   useCreateIndex :  true
+   useCreateIndex :  true,
+   useFindAndModify : false
 })
 
 // IMPORT MODELS
@@ -44,7 +45,7 @@ app.get('/users', async (req, res) => {
 })
 
 // Create New User
-app.post('/users/:id', async (req, res) => {
+app.post('/users', async (req, res) => {
    // req.body = {username : 'rochafi', name: 'Rochafi', age: 28}
 
    // Create new user
@@ -87,10 +88,44 @@ app.get('/user/:id', async (req, res) => {
 })
 
 // Update User By Id
+app.patch('/user/:id', async (req, res) => {
+   let _id = req.params.id
+   let body = req.body
+
+   // Callback (ES 5 / 2014)
+   // User.findByIdAndUpdate(_id, body, function(err, doc) {
+   //    if(err){
+   //       return res.send(err)
+   //    }
+
+   //    res.send(doc)
+   // })
+
+   // Promise (ES 6 / 2015)
+   // User.findByIdAndUpdate(_id, body)
+   //    .then(doc => {
+   //       res.send(doc)
+
+   //    }).catch(err => {
+   //       res.send(err)
+
+   //    })
+
+   // Async Await (ES 7 / 2016)
+   try {
+      let doc = await User.findByIdAndUpdate(_id, body)
+      res.send(doc)
+
+   } catch (err) {
+      res.send(err)
+      
+   }
+})
 
 // Delete User By Id
 app.delete('/user/:id', async (req, res) => {
    let _id = req.params.id
+
 
    try {
       let user = await User.findByIdAndDelete(_id)
@@ -105,7 +140,7 @@ app.delete('/user/:id', async (req, res) => {
 
    } catch (err) {
       res.send(err)
-      
+
    }
 })
 
