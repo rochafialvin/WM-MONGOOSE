@@ -60,8 +60,11 @@ app.post('/users', async (req, res) => {
    } catch (err) {
       res.send(err)
    }
+
       
 })
+
+
 
 // Read One User By Id
 app.get('/user/:id', async (req, res) => {
@@ -85,6 +88,23 @@ app.get('/user/:id', async (req, res) => {
       res.send(err)
 
    }
+})
+
+// L O G I N   U S E R 
+app.post('/user/login', async (req, res) => {
+   // req.body = {email : ... , password: ...}
+   let {email, password} = req.body
+
+   try {
+      // Check email dan password
+      let user = await User.loginByEmailPassword(email, password)
+      // Jika berhasil maka akan berisi data user
+      res.send(user)
+   } catch (err) {
+      // Jika gagal, mengirim object error
+      res.send({err_message: err.message})
+   }
+
 })
 
 
@@ -145,8 +165,5 @@ app.delete('/user/:id', async (req, res) => {
 
    }
 })
-
-
-
 
 app.listen(port, () => { console.log('Success Running') })

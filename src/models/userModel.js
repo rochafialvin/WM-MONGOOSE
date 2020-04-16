@@ -58,6 +58,18 @@ const userSchema = new mongoose.Schema({
    }
 })
 
+//  Kapanpun kita menjalankan 'res.send' , method JSON.stringify() akan dirunning, kemudian method toJSON()
+// Kita dapat menentukan operasi apa yang akan dijalankan di dalam toJSON, dalam hal ini menghapus property password dan __v
+userSchema.methods.toJSON = function(){
+   // this = {username : 'rochafi', password : 'satuduatiga, ... }
+   let user = this.toObject()
+
+   delete user.password
+   delete user.__v
+
+   return user
+}
+
 userSchema.pre('save', async function(next) { // Mengganti password sebelum di save ke database
    // this = {username : 'rochafi', password : 'satuduatiga, ... }
    let user = this
@@ -71,6 +83,24 @@ userSchema.pre('save', async function(next) { // Mengganti password sebelum di s
    // Untuk memberi tahu bahwa proses sudah selesai, dan melanjutkan ke proses berikutkunya (save data ke database)
    next()
 })
+
+userSchema.statics.loginByEmailPassword = async (email, password ) => {
+
+   // Cari user berdasarkan email
+   let user = await User.findOne({email})
+
+   // Jika user tidak ditemukan
+   if(!user) throw new Error('User tidak ditemukan')
+
+   // Compare password yang di input user dengan password yang ada di database
+   let match = await bcrypt.compare(password, user.password)
+
+   // Jika input user tidak sama dengan yang di database
+   if(!match) throw new Error('Password salah')
+
+   return user
+
+}
 
 
 const User = mongoose.model('User', userSchema)
