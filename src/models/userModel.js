@@ -55,8 +55,12 @@ const userSchema = new mongoose.Schema({
       type: Number,
       default: 0,
       set: val => parseInt(val)
-   }
-})
+   },
+   tasks : [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref : 'Task'
+   }]
+}, {timestamps: true})
 
 //  Kapanpun kita menjalankan 'res.send' , method JSON.stringify() akan dirunning, kemudian method toJSON()
 // Kita dapat menentukan operasi apa yang akan dijalankan di dalam toJSON, dalam hal ini menghapus property password dan __v

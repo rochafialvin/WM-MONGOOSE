@@ -15,6 +15,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/mongoose-test', {
 
 // IMPORT MODELS
 const User = require('./src/models/userModel')
+const Task = require('./src/models/taskModel')
 
 // HOME
 app.get('/', (req, res) => {
@@ -44,7 +45,7 @@ app.get('/users', async (req, res) => {
 
 })
 
-// Create New User
+// R E G I S T E R   U S E R
 app.post('/users', async (req, res) => {
    // req.body = {username : 'rochafi', name: 'Rochafi', age: 28}
 
@@ -63,8 +64,6 @@ app.post('/users', async (req, res) => {
 
       
 })
-
-
 
 // Read One User By Id
 app.get('/user/:id', async (req, res) => {
@@ -165,5 +164,26 @@ app.delete('/user/:id', async (req, res) => {
 
    }
 })
+
+
+// T A S K
+app.post('/tasks/:userid', async (req, res) => {
+   let owner = req.params.userid
+   let description = req.body.description
+
+   // task = {_id : 14 , description: Memancing, completed : false, owner : 333}
+   let task = new Task({ description, owner })
+   // user = {_id: 333, username : rochafi, tasks : []}
+   let user = await User.findById(owner)
+   user.tasks.push(task._id)
+
+   await task.save()
+   await user.save()
+
+   res.send(task)
+
+})
+
+
 
 app.listen(port, () => { console.log('Success Running') })
