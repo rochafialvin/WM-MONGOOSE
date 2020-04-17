@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema({
    },
    todos : [{
       type: mongoose.Schema.Types.ObjectId,
-      ref : 'Task'
+      ref : 'Todo'
    }]
 }, {timestamps: true})
 

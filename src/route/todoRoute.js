@@ -3,7 +3,7 @@ const router = new express.Router()
 const Todo = require('../models/todoModel')
 const User = require('../models/userModel')
 
-// T O D O
+// CREATE TODO
 router.post('/todos/:userid', async (req, res) => {
    let owner = req.params.userid
    let description = req.body.description
@@ -24,5 +24,37 @@ router.post('/todos/:userid', async (req, res) => {
    }
 
 })
+
+// READ TODO BY ID
+router.get('/todos/:userid', async (req, res) => {
+   // Menyimpan id user ke dalam userid
+   let userid = req.params.userid
+
+   try {
+      // Mencari user berdasarkan id kemudian mencari semua todos yang ia punya
+      let user = await User.find({_id : userid}).populate({
+         path: 'todos'
+      }).exec()
+
+      // Mengirimkan hanya list todo saja sebagai responnya
+      res.send(user[0].todos)
+      
+   } catch (err) {
+      res.send(err)
+   }
+
+      
+})
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = router
