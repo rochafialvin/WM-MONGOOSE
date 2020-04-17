@@ -2,6 +2,47 @@ const express = require('express')
 const router = new express.Router()
 const User = require('../models/userModel')
 
+///////////////////////////////
+// U P L O A D   M U L T E R //
+///////////////////////////////
+
+const multer = require('multer')
+const upload = multer({
+   limits : {
+      fileSize : 1000000 // Byte
+   },
+   fileFilter(req, file, cb) {
+      // file = {fieldname : 'avatar', originalname: 'maxresdefault.jpg'}
+
+      if(!file.originalname.match(/\.(jpg|jpeg|png)$/)){
+        return cb(new Error('File harus berupa jpg, jpeg, png'))
+      }
+
+      cb(null, true)
+   }
+})
+
+// UPLOAD FOTO (Belum selesai)
+router.post('/users/avatar/:userid', upload.single('avatar') , async (req, res) => {
+   // Jika foto berhasil melewati filter name maka akan ada di 'req.file'
+   // req.file = {fieldname, originalname, buffer}
+
+   try {
+      // Mencari user bedasarkan id
+      let user = await User.findById(req.params.userid)
+      // Menyimpan gambar dalam bentuk buffer
+      user.avatar = req.file.buffer
+      // Menyimpan user setelah ada perubahan (menyimpan gambar)
+      await user.save()
+      // Mengirim respon ke client
+      res.send('Upload Success')
+
+   } catch (err) {
+      // Mengirim error
+      res.send(err)
+   }
+})
+
 // Read All User
 router.get('/users', async (req, res) => {
 

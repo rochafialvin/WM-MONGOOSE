@@ -56,6 +56,9 @@ const userSchema = new mongoose.Schema({
       default: 0,
       set: val => parseInt(val)
    },
+   avatar : {
+      type: Buffer
+   },
    todos : [{
       type: mongoose.Schema.Types.ObjectId,
       ref : 'Todo'

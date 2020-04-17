@@ -1,0 +1,14 @@
+BACK END
+- Update Task (Dapat mengubah status completed dari true menjadi false dan sebaliknya)
+- Delete Task (Ketika sebuah todo di delete, maka id task tersebut dihapus dari array 'todos' milik user)
+
+FRONT END
+- Buat Navbar, terdapat menu login, register yang akan berubah menjadi dropdown jika sudah login (sama seperti simplemerce)
+- Buat halaman register dan login
+- Halaman Todo (Dimana kita dapat input 'todo'). Gambar terlampir
+- Fungsi Done dan Cancel. Jika di tekan tombol done, akan tercoret dan tombol berubah menjadi cancel, juga sebaliknya
+- Jika di double klik akan delete todo.
+
+Ada screenshot yang udah jadinya di folder ini ya
+
+Happy Weekend 😀.
