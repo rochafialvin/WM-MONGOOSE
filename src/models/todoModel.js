@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const taskSchema = new mongoose.Schema({
+const todoSchema = new mongoose.Schema({
    description: {
       type: String,
       required: true,
@@ -25,5 +25,5 @@ const taskSchema = new mongoose.Schema({
    }
 }, {timestamps: true})
 
-const Task = mongoose.model('Task', taskSchema)
-module.exports = Task
+const Todo = mongoose.model('Todo', todoSchema)
+module.exports = Todo

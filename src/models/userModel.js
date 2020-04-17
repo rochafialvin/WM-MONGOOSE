@@ -56,13 +56,14 @@ const userSchema = new mongoose.Schema({
       default: 0,
       set: val => parseInt(val)
    },
-   tasks : [{
+   todos : [{
       type: mongoose.Schema.Types.ObjectId,
       ref : 'Task'
    }]
 }, {timestamps: true})
 
-//  Kapanpun kita menjalankan 'res.send' , method JSON.stringify() akan dirunning, kemudian method toJSON()
+// user = {_id, username, name, email}
+//  Kapanpun kita menjalankan 'res.send(user)' , method toJSON() akan di running sebelum benar2 di kirim
 // Kita dapat menentukan operasi apa yang akan dijalankan di dalam toJSON, dalam hal ini menghapus property password dan __v
 userSchema.methods.toJSON = function(){
    // this = {username : 'rochafi', password : 'satuduatiga, ... }
@@ -75,11 +76,17 @@ userSchema.methods.toJSON = function(){
 }
 
 userSchema.pre('save', async function(next) { // Mengganti password sebelum di save ke database
-   // this = {username : 'rochafi', password : 'satuduatiga, ... }
+   // this = {_id: 333, username : rochafi, password: $2sjKil todos : [14]}
    let user = this
 
-   try{
-      user.password = await bcrypt.hash(user.password, 8)
+   try{                 
+      
+      // Jika password user mengalami perubahan
+      if(user.isModified('password')){
+         user.password = await bcrypt.hash(user.password, 8)
+      }
+
+      
    } catch(err) {
       throw new Error('Problem when hash password')
    }
@@ -88,7 +95,9 @@ userSchema.pre('save', async function(next) { // Mengganti password sebelum di s
    next()
 })
 
-userSchema.statics.loginByEmailPassword = async (email, password ) => {
+
+// Membuat function tambahan
+userSchema.statics.login = async (email, password ) => {
 
    // Cari user berdasarkan email
    let user = await User.findOne({email})

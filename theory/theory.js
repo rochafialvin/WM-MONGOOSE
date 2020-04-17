@@ -21,9 +21,9 @@
 //    validator.isEmail(email)
 // )
 
-const bcrypt = require('bcryptjs')
+// const bcrypt = require('bcryptjs')
 
-let password = 'satuduaempat'
+// let password = 'satuduaempat'
 
 // bcrypt.hash(password, 8)
 //    .then(res => console.log({ newPassword : res }))
@@ -35,3 +35,29 @@ let password = 'satuduaempat'
 // bcrypt.compare('satuduaempat', '$2a$08$WHrLd8GV5ogO63U8/4fNE.he8N5JqvJ2W0YGXUvGeoueHvQs5YdXe')
 //    .then(res => console.log({res}))
 //    .catch(err => console.log({err}))
+
+// let a = 'Senin'
+// let b = 'Selasa'
+
+// try{
+
+//    console.log('try start')
+   
+//    console.log(a)
+//    console.log(b)
+
+//    console.log('try finish')
+
+//    return 24
+
+// } catch(err){
+
+//    console.log('Catch')
+//    console.log({error : err.message})
+
+// } finally {
+//    console.log('Finally')
+// }
+
+
+
