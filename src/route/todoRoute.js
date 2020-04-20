@@ -3,7 +3,7 @@ const router = new express.Router()
 const Todo = require('../models/todoModel')
 const User = require('../models/userModel')
 
-// CREATE TODO
+// Create Todo
 router.post('/todos/:userid', async (req, res) => {
    let owner = req.params.userid
    let description = req.body.description
@@ -25,7 +25,7 @@ router.post('/todos/:userid', async (req, res) => {
 
 })
 
-// READ TODO BY ID
+// Read Todo
 router.get('/todos/:userid', async (req, res) => {
    // Menyimpan id user ke dalam userid
    let userid = req.params.userid
@@ -42,8 +42,47 @@ router.get('/todos/:userid', async (req, res) => {
    } catch (err) {
       res.send(err)
    }
-
       
+})
+
+// Update Todo Completed
+router.patch('/todo/:todoid', async (req, res) => {
+   // Property yang dikirim
+   let keys = Object.keys(req.body)
+   // Filtering untuk property yang dikirim apakah ada yang undefined atau string kosong
+   let finalKeys = keys.filter(val => {
+      if(req.body[val] === undefined || req.body[val] === ""){
+         return false
+      } else {
+         return true
+      }
+   })
+
+   try {
+      let todo = await Todo.findById(req.params.todoid)
+      // Update nilai todo sesuai hasil filtering
+      finalKeys.forEach(val => todo[val] = req.body[val])
+      // save
+      await todo.save()
+
+      res.send('Update Berhasil')
+   } catch (err) {
+      res.send(err)
+   }
+
+})
+
+// Delete todo
+router.delete('/todo/:todoid', async (req, res) => {
+
+   try {
+      let todo = await Todo.findByIdAndDelete(req.params.todoid)
+      res.send('Delete Berhasil')
+   } catch (err) {
+      res.send(err)
+   }
+
+
 })
 
 

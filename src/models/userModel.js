@@ -74,6 +74,7 @@ userSchema.methods.toJSON = function(){
 
    delete user.password
    delete user.__v
+   delete user.avatar
 
    return user
 }
