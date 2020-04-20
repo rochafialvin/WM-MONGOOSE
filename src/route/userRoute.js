@@ -1,5 +1,6 @@
 const express = require('express')
 const router = new express.Router()
+const sharp = require('sharp')
 const User = require('../models/userModel')
 
 ///////////////////////////////
@@ -22,16 +23,18 @@ const upload = multer({
    }
 })
 
-// UPLOAD FOTO (Belum selesai)
+// Upload Avatar
 router.post('/users/avatar/:userid', upload.single('avatar') , async (req, res) => {
    // Jika foto berhasil melewati filter name maka akan ada di 'req.file'
    // req.file = {fieldname, originalname, buffer}
 
    try {
+      // Edit Avatar : resize, convert ke png
+      let avatar = await sharp(req.file.buffer).resize({width: 250}).png().toBuffer()
       // Mencari user bedasarkan id
       let user = await User.findById(req.params.userid)
       // Menyimpan gambar dalam bentuk buffer
-      user.avatar = req.file.buffer
+      user.avatar = avatar
       // Menyimpan user setelah ada perubahan (menyimpan gambar)
       await user.save()
       // Mengirim respon ke client
@@ -41,6 +44,26 @@ router.post('/users/avatar/:userid', upload.single('avatar') , async (req, res) 
       // Mengirim error
       res.send(err)
    }
+})
+
+// Read Avatar
+router.get('/user/avatar/:userid', async (req, res) => {
+
+   try {
+      // Get user
+      let user = await User.findById(req.params.userid)
+
+      // Jika user belum memiliki avatar
+      if(!user.avatar) return res.send('No Image')
+      
+      // Config untuk mengirim avatar
+      res.set('Content-type', 'image/png')
+      // Kirim avatar
+      res.send(user.avatar)
+   } catch (err) {
+      res.send(err)
+   }
+
 })
 
 // Read All User

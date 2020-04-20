@@ -20,7 +20,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/mongoose-test', {
    useUnifiedTopology: true,
    useCreateIndex :  true,
    useFindAndModify : false
-})
+}, () => {console.log("Connected to db")})
 
 // HOME
 app.get('/', (req, res) => {
@@ -29,4 +29,4 @@ app.get('/', (req, res) => {
    )
 })
 
-app.listen(port, () => { console.log('Success Running') })
+app.listen(port, () => { console.log('API is Running') })
