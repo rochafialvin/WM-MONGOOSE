@@ -121,7 +121,7 @@ router.get('/user/:id', async (req, res) => {
       }
 
       // Kirim user sebagai bentu respon
-      res.send(user)
+      res.send({user, photo : `http://localhost:2020/user/avatar/${_id}` })
 
    } catch (err){ // Jika terjadi masalah dalam proses pencarian data
       res.send(err)
