@@ -8,9 +8,10 @@ const User = require('../models/userModel')
 ///////////////////////////////
 
 const multer = require('multer')
+
 const upload = multer({
    limits : {
-      fileSize : 1000000 // Byte
+      fileSize : 10000000 // Byte
    },
    fileFilter(req, file, cb) {
       // file = {fieldname : 'avatar', originalname: 'maxresdefault.jpg'}
@@ -44,6 +45,8 @@ router.post('/users/avatar/:userid', upload.single('avatar') , async (req, res) 
       // Mengirim error
       res.send(err)
    }
+}, (err, req, res, next) => {
+   res.send(err.message)
 })
 
 // Read Avatar
