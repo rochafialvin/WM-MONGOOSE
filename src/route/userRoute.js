@@ -114,7 +114,7 @@ router.get('/user/:id', async (req, res) => {
       }
 
       // Kirim user sebagai bentu respon
-      res.send({user, photo : `http://localhost:2020/user/avatar/${_id}` })
+      res.send({user, photo : `http://localhost:2020/user/avatar/${_id}?time=${Date.now()}` })
 
    } catch (err){ // Jika terjadi masalah dalam proses pencarian data
       res.send(err)
@@ -171,24 +171,30 @@ router.patch('/user/:id', upload.single('avatar'), async (req, res) => {
    let body = req.body
 
    let keys = Object.keys(body)
+   // ['name', 'email', 'age', 'password', ]
+   keys = keys.filter(key => {
+      return body[key]
+   })
    
-
    try {
       let user = await User.findById(_id)
 
       // Update Name, Email, Age, Password
       keys.forEach(key => user[key] = req.body[key])
 
-      // Update Avatar
-      let avatar = await sharp(req.file.buffer).resize(200).png().toBuffer()
-      user.avatar = avatar
+      // Jika client mengirim gambar
+      if(req.file){
+         // Update Avatar
+         let avatar = await sharp(req.file.buffer).resize(200).png().toBuffer()
+         user.avatar = avatar
+      }
 
       await user.save()
 
       res.send('Update Berhasil')
 
    } catch (err) {
-      res.send(err)
+      res.send(err.message)
       
    }
 
